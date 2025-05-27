@@ -1,8 +1,10 @@
-package mft.model;
+package mft.model.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import mft.model.entity.enums.Gender;
+import mft.model.entity.enums.Role;
 
 import java.io.Serializable;
 import java.time.LocalDate;

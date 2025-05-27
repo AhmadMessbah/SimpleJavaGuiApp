@@ -8,12 +8,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import lombok.extern.log4j.Log4j2;
-import mft.model.Gender;
-import mft.model.Person;
-import mft.model.PersonDataAccess;
-import mft.model.Role;
+import mft.model.entity.enums.Gender;
+import mft.model.entity.Person;
+import mft.model.repository.PersonDataAccess;
+import mft.model.entity.enums.Role;
+import mft.model.repository.PersonDataFileManager;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -86,8 +86,48 @@ public class PersonController implements Initializable {
                log.info("Person Created Successfully " + person);
            }catch(Exception e){
                e.printStackTrace();
-               log.error(e.getMessage());
+               log.error("Person Creation Error : "  + e.getMessage());
            }
+        });
+
+        editBtn.setOnAction((event) -> {
+            try{
+                RadioButton selectedGenderRadio = (RadioButton) genderToggleGroup.getSelectedToggle();
+                Person person =
+                        Person
+                                .builder()
+                                .id(Integer.parseInt(idTxt.getText()))
+                                .name(nameTxt.getText())
+                                .family(familyTxt.getText())
+                                .birthDate(birthDate.getValue())
+                                .role(roleCmb.getSelectionModel().getSelectedItem())
+                                .algorithmSkill(algoChk.isSelected())
+                                .javaSkill(javaChk.isSelected())
+                                .gender(Gender.valueOf(selectedGenderRadio.getText()))
+                                .build();
+                personDataAccess.editPerson(person);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Edited Successfully", ButtonType.OK);
+                alert.show();
+                resetForm();
+                log.info("Person Edit Successfully " + person);
+            }catch(Exception e){
+                e.printStackTrace();
+                log.error("Person Editing " + e.getMessage());
+            }
+        });
+
+        removeBtn.setOnAction((event) -> {
+            try{
+                int id = Integer.parseInt(idTxt.getText());
+                personDataAccess.removePerson(id);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Created Successfully", ButtonType.OK);
+                alert.show();
+                resetForm();
+                log.info("Person Deleted Successfully " + id);
+            }catch(Exception e){
+                e.printStackTrace();
+                log.error("Person Deleting Error :" + e.getMessage());
+            }
         });
 
         clearBtn.setOnAction((event) -> {resetForm();});
@@ -126,7 +166,7 @@ public class PersonController implements Initializable {
     }
 
     public void resetForm() {
-        idTxt.setText(String.valueOf(personDataAccess.getNextId()));
+        idTxt.setText(String.valueOf(PersonDataFileManager.getManager().getNextId()));
         nameTxt.clear();
         familyTxt.clear();
         nameSearchTxt.clear();
