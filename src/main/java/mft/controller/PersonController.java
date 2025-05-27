@@ -23,7 +23,10 @@ import java.util.ResourceBundle;
 @Log4j2
 public class PersonController implements Initializable {
     @FXML
-    private TextField idTxt, nameTxt, familyTxt, nameSearchTxt, familySearchTxt;
+    private TextField idTxt, nameTxt, familyTxt, nameSearchTxt, familySearchTxt, usernameTxt;
+
+    @FXML
+    private PasswordField passwordTxt;
 
     @FXML
     private DatePicker birthDate;
@@ -73,6 +76,8 @@ public class PersonController implements Initializable {
                                .id(Integer.parseInt(idTxt.getText()))
                                .name(nameTxt.getText())
                                .family(familyTxt.getText())
+                               .username(usernameTxt.getText())
+                               .password(passwordTxt.getText())
                                .birthDate(birthDate.getValue())
                                .role(roleCmb.getSelectionModel().getSelectedItem())
                                .algorithmSkill(algoChk.isSelected())
@@ -99,6 +104,8 @@ public class PersonController implements Initializable {
                                 .id(Integer.parseInt(idTxt.getText()))
                                 .name(nameTxt.getText())
                                 .family(familyTxt.getText())
+                                .username(usernameTxt.getText())
+                                .password(passwordTxt.getText())
                                 .birthDate(birthDate.getValue())
                                 .role(roleCmb.getSelectionModel().getSelectedItem())
                                 .algorithmSkill(algoChk.isSelected())
@@ -120,7 +127,7 @@ public class PersonController implements Initializable {
             try{
                 int id = Integer.parseInt(idTxt.getText());
                 personDataAccess.removePerson(id);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Created Successfully", ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Removed Successfully", ButtonType.OK);
                 alert.show();
                 resetForm();
                 log.info("Person Deleted Successfully " + id);
@@ -153,6 +160,8 @@ public class PersonController implements Initializable {
             idTxt.setText(String.valueOf(selectedPerson.getId()));
             nameTxt.setText(selectedPerson.getName());
             familyTxt.setText(selectedPerson.getFamily());
+            usernameTxt.setText(selectedPerson.getUsername());
+            passwordTxt.setText(selectedPerson.getPassword());
             birthDate.setValue(selectedPerson.getBirthDate());
             roleCmb.getSelectionModel().select(selectedPerson.getRole());
             algoChk.setSelected(selectedPerson.isAlgorithmSkill());
@@ -169,6 +178,8 @@ public class PersonController implements Initializable {
         idTxt.setText(String.valueOf(PersonDataFileManager.getManager().getNextId()));
         nameTxt.clear();
         familyTxt.clear();
+        usernameTxt.clear();
+        passwordTxt.clear();
         nameSearchTxt.clear();
         familySearchTxt.clear();
 

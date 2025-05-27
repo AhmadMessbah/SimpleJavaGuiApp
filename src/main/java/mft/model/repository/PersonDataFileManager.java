@@ -16,6 +16,7 @@ public class PersonDataFileManager {
 
     private static List<Person> personList;
 
+    @Getter
     private static final PersonDataFileManager manager = new PersonDataFileManager();
 
     public List<Person> getPersonList() {
@@ -27,10 +28,6 @@ public class PersonDataFileManager {
             personList = new ArrayList<>();
         }
         personList.add(person);
-    }
-
-    public static PersonDataFileManager getManager(){
-        return manager;
     }
 
     public int getNextId() {
