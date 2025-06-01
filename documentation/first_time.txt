@@ -1,0 +1,40 @@
+Microsoft Windows [Version 10.0.19044.5487]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Student>sqlplus
+
+SQL*Plus: Release 21.0.0.0.0 - Production on Sun Jun 1 19:11:17 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: sys as sysdba
+Enter password:
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> alter session set "_ORACLE_SCRIPT" = true;
+
+Session altered.
+
+SQL> create user java identified by java123;
+
+User created.
+
+SQL> grant dba to java;
+
+Grant succeeded.
+
+SQL> show user;
+USER is "SYS"
+SQL> connect java/java123;
+Connected.
+SQL> show user;
+USER is "JAVA"
+SQL> commit;
+
+Commit complete.
+
+SQL>

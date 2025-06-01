@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
 import mft.controller.exception.UserNotFoundException;
 import mft.model.entity.Person;
-import mft.model.repository.PersonDataAccess;
+import mft.model.repository.PersonDA;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,14 +26,11 @@ public class LoginController implements Initializable {
     @FXML
     private Button loginBtn;
 
-
-    private PersonDataAccess personDataAccess = new PersonDataAccess();
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loginBtn.setOnAction(event -> {
-            try {
-                Person person = personDataAccess.login(usernameTxt.getText(), passwordTxt.getText());
+            try (PersonDA personDA = new PersonDA()) {
+                Person person = personDA.login(usernameTxt.getText(), passwordTxt.getText());
 
                 loginBtn.getScene().getWindow().hide();
 

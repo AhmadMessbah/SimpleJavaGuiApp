@@ -54,7 +54,7 @@
                <GridPane.margin>
                   <Insets top="-20.0" />
                </GridPane.margin></Label>
-            <TextField fx:id="idTxt" disable="true" editable="false" GridPane.columnIndex="1" />
+            <TextField fx:id="idTxt" GridPane.columnIndex="1" />
             <TextField fx:id="nameTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="familyTxt" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="usernameTxt" GridPane.columnIndex="1" GridPane.rowIndex="3" />

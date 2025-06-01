@@ -11,9 +11,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.extern.log4j.Log4j2;
 import mft.model.entity.enums.Gender;
 import mft.model.entity.Person;
-import mft.model.repository.PersonDataAccess;
+import mft.model.repository.PersonDA;
 import mft.model.entity.enums.Role;
-import mft.model.repository.PersonDataFileManager;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -58,8 +57,6 @@ public class PersonController implements Initializable {
     @FXML
     private TableColumn<Person, Role> roleCol;
 
-    private PersonDataAccess personDataAccess = new PersonDataAccess();
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (Role role : Role.values()) {
@@ -68,35 +65,7 @@ public class PersonController implements Initializable {
         resetForm();
 
         saveBtn.setOnAction((event) -> {
-           try{
-               RadioButton selectedGenderRadio = (RadioButton) genderToggleGroup.getSelectedToggle();
-               Person person =
-                       Person
-                               .builder()
-                               .id(Integer.parseInt(idTxt.getText()))
-                               .name(nameTxt.getText())
-                               .family(familyTxt.getText())
-                               .username(usernameTxt.getText())
-                               .password(passwordTxt.getText())
-                               .birthDate(birthDate.getValue())
-                               .role(roleCmb.getSelectionModel().getSelectedItem())
-                               .algorithmSkill(algoChk.isSelected())
-                               .javaSkill(javaChk.isSelected())
-                               .gender(Gender.valueOf(selectedGenderRadio.getText()))
-                               .build();
-               personDataAccess.savePerson(person);
-               Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Created Successfully", ButtonType.OK);
-               alert.show();
-               resetForm();
-               log.info("Person Created Successfully " + person);
-           }catch(Exception e){
-               e.printStackTrace();
-               log.error("Person Creation Error : "  + e.getMessage());
-           }
-        });
-
-        editBtn.setOnAction((event) -> {
-            try{
+            try (PersonDA personDA = new PersonDA()) {
                 RadioButton selectedGenderRadio = (RadioButton) genderToggleGroup.getSelectedToggle();
                 Person person =
                         Person
@@ -112,45 +81,72 @@ public class PersonController implements Initializable {
                                 .javaSkill(javaChk.isSelected())
                                 .gender(Gender.valueOf(selectedGenderRadio.getText()))
                                 .build();
-                personDataAccess.editPerson(person);
+                personDA.save(person);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Created Successfully", ButtonType.OK);
+                alert.show();
+                resetForm();
+                log.info("Person Created Successfully " + person);
+            } catch (Exception e) {
+                log.error("Person Creation Error : " + e.getMessage());
+            }
+        });
+
+        editBtn.setOnAction((event) -> {
+            try (PersonDA personDA = new PersonDA()) {
+                RadioButton selectedGenderRadio = (RadioButton) genderToggleGroup.getSelectedToggle();
+                Person person =
+                        Person
+                                .builder()
+                                .id(Integer.parseInt(idTxt.getText()))
+                                .name(nameTxt.getText())
+                                .family(familyTxt.getText())
+                                .username(usernameTxt.getText())
+                                .password(passwordTxt.getText())
+                                .birthDate(birthDate.getValue())
+                                .role(roleCmb.getSelectionModel().getSelectedItem())
+                                .algorithmSkill(algoChk.isSelected())
+                                .javaSkill(javaChk.isSelected())
+                                .gender(Gender.valueOf(selectedGenderRadio.getText()))
+                                .build();
+                personDA.edit(person);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Edited Successfully", ButtonType.OK);
                 alert.show();
                 resetForm();
                 log.info("Person Edit Successfully " + person);
-            }catch(Exception e){
-                e.printStackTrace();
+            } catch (Exception e) {
                 log.error("Person Editing " + e.getMessage());
             }
         });
 
         removeBtn.setOnAction((event) -> {
-            try{
+            try (PersonDA personDA = new PersonDA()) {
                 int id = Integer.parseInt(idTxt.getText());
-                personDataAccess.removePerson(id);
+                personDA.delete(id);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Removed Successfully", ButtonType.OK);
                 alert.show();
                 resetForm();
                 log.info("Person Deleted Successfully " + id);
-            }catch(Exception e){
-                e.printStackTrace();
+            } catch (Exception e) {
                 log.error("Person Deleting Error :" + e.getMessage());
             }
         });
 
-        clearBtn.setOnAction((event) -> {resetForm();});
+        clearBtn.setOnAction((event) -> {
+            resetForm();
+        });
 
         nameSearchTxt.setOnKeyReleased((event) -> {
-           try{
-               showPersonsOnTable(personDataAccess.getPersonsByNameAndFamily(nameSearchTxt.getText(), familySearchTxt.getText()));
-           }catch(Exception e){
-               log.error(e.getMessage());
-           }
+            try (PersonDA personDA = new PersonDA()) {
+                showPersonsOnTable(personDA.findByNameAndFamily(nameSearchTxt.getText(), familySearchTxt.getText()));
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
         });
 
         familySearchTxt.setOnKeyReleased((event) -> {
-            try{
-                showPersonsOnTable(personDataAccess.getPersonsByNameAndFamily(nameSearchTxt.getText(), familySearchTxt.getText()));
-            }catch(Exception e){
+            try (PersonDA personDA = new PersonDA()) {
+                showPersonsOnTable(personDA.findByNameAndFamily(nameSearchTxt.getText(), familySearchTxt.getText()));
+            } catch (Exception e) {
                 log.error(e.getMessage());
             }
         });
@@ -175,7 +171,7 @@ public class PersonController implements Initializable {
     }
 
     public void resetForm() {
-        idTxt.setText(String.valueOf(PersonDataFileManager.getManager().getNextId()));
+        idTxt.clear();
         nameTxt.clear();
         familyTxt.clear();
         usernameTxt.clear();
@@ -191,9 +187,9 @@ public class PersonController implements Initializable {
         javaChk.setSelected(false);
 
         maleRdo.setSelected(true);
-        try {
-            showPersonsOnTable(personDataAccess.getAllPersons());
-        }catch (Exception e){
+        try (PersonDA personDA = new PersonDA()) {
+            showPersonsOnTable(personDA.findAll());
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
     }

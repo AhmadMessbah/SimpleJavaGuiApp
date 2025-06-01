@@ -8,13 +8,13 @@ import lombok.extern.log4j.Log4j2;
 import mft.model.entity.Person;
 import mft.model.entity.enums.Gender;
 import mft.model.entity.enums.Role;
-import mft.model.repository.PersonDataAccess;
+import mft.model.repository.PersonDA;
 
-import java.io.IOException;
+import java.sql.SQLException;
 
 @Log4j2
 public class App extends Application {
-    public void saveAdmin() throws IOException {
+    public void saveAdmin() throws SQLException {
         Person person =
                 Person
                         .builder()
@@ -25,8 +25,8 @@ public class App extends Application {
                         .role(Role.Admin)
                         .gender(Gender.Male)
                         .build();
-         PersonDataAccess personDataAccess = new PersonDataAccess();
-         personDataAccess.savePerson(person);
+         PersonDA personDA = new PersonDA();
+         personDA.save(person);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class App extends Application {
         saveAdmin();
        try{
            Scene scene = new Scene(
-                   FXMLLoader.load(getClass().getResource("/view/LoginView.fxml"))
+                   FXMLLoader.load(getClass().getResource("/view/PersonView.fxml"))
            );
            primaryStage.setScene(scene);
            primaryStage.setTitle("Login");
