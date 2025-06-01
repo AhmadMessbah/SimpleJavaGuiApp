@@ -31,10 +31,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        saveAdmin();
+//        saveAdmin();
        try{
            Scene scene = new Scene(
-                   FXMLLoader.load(getClass().getResource("/view/PersonView.fxml"))
+                   FXMLLoader.load(getClass().getResource("/view/LoginView.fxml"))
            );
            primaryStage.setScene(scene);
            primaryStage.setTitle("Login");
