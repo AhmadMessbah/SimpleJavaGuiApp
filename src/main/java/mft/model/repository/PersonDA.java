@@ -22,6 +22,11 @@ public class PersonDA implements AutoCloseable {
     }
 
     public void save(Person person) throws SQLException {
+        preparedStatement = connection.prepareStatement("select person_seq.nextval from dual");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        person.setId(resultSet.getInt("nextval"));
+
         preparedStatement = connection.prepareStatement("insert into persons values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         preparedStatement.setInt(1, person.getId());
         preparedStatement.setString(2, person.getName());

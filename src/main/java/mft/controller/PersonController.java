@@ -82,11 +82,20 @@ public class PersonController implements Initializable {
                                 .gender(Gender.valueOf(selectedGenderRadio.getText()))
                                 .build();
                 personDA.save(person);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Created Successfully", ButtonType.OK);
+                Alert alert = new Alert(
+                        Alert.AlertType.INFORMATION,
+                        "Person Created Successfully",
+                        ButtonType.OK
+                );
                 alert.show();
                 resetForm();
                 log.info("Person Created Successfully " + person);
             } catch (Exception e) {
+                Alert alert = new Alert(
+                        Alert.AlertType.ERROR,
+                        "Person Create Error : " + e.getMessage(),
+                        ButtonType.OK);
+                alert.show();
                 log.error("Person Creation Error : " + e.getMessage());
             }
         });
@@ -114,6 +123,11 @@ public class PersonController implements Initializable {
                 resetForm();
                 log.info("Person Edit Successfully " + person);
             } catch (Exception e) {
+                    Alert alert = new Alert(
+                            Alert.AlertType.ERROR,
+                            "Person Edit Error : " + e.getMessage(),
+                            ButtonType.OK);
+                    alert.show();
                 log.error("Person Editing " + e.getMessage());
             }
         });
@@ -127,6 +141,11 @@ public class PersonController implements Initializable {
                 resetForm();
                 log.info("Person Deleted Successfully " + id);
             } catch (Exception e) {
+                    Alert alert = new Alert(
+                            Alert.AlertType.ERROR,
+                            "Person Delete Error : " + e.getMessage(),
+                            ButtonType.OK);
+                    alert.show();
                 log.error("Person Deleting Error :" + e.getMessage());
             }
         });

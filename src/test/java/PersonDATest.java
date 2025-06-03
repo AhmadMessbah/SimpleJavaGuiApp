@@ -10,17 +10,16 @@ public class PersonDATest {
         Person person =
                 Person
                         .builder()
-                        .id(0)
                         .name("mohsen")
                         .family("Akbari")
-                        .username("Admin")
+                        .username("Admin11")
                         .password("Admin123")
                         .birthDate(LocalDate.now())
                         .role(Role.Admin)
                         .gender(Gender.Male)
                         .build();
         try (PersonDA personDA = new PersonDA()) {
-//            personDA.save(person);
+            personDA.save(person);
 //            personDA.edit(person);
 //            personDA.delete(0);
 
@@ -28,12 +27,11 @@ public class PersonDATest {
 //                System.out.println(person1);
 //            }
 
-//            System.out.println(personDA.findById(12));
+            System.out.println(personDA.findById(1));
 
 //            System.out.println(personDA.findByNameAndFamily("a", ""));
 
 //            System.out.println(personDA.login("ahmad1111", "ahmad123"));
-
         }
     }
 }

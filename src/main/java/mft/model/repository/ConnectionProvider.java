@@ -14,11 +14,12 @@ public class ConnectionProvider {
     }
 
     public Connection getConnection() throws SQLException {
-        return DriverManager
-                .getConnection(
-                        "jdbc:oracle:thin:@localhost:1521:xe",
-                        "java",
-                        "java123"
-                );
+        Connection connection = DriverManager.getConnection(
+                "jdbc:oracle:thin:@localhost:1521:xe",
+                "javase",
+                "java123"
+        );
+//        connection.setAutoCommit(false);
+        return connection;
     }
 }

@@ -8,8 +8,7 @@
 
 
 
-[//]: # (todo : )
-    - id --> sequence.nextval
+[//]: # (todo : ) 
     - connection pool (dbcp2)
     - validation
     - relation 
