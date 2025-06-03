@@ -67,20 +67,16 @@ public class PersonController implements Initializable {
         saveBtn.setOnAction((event) -> {
             try (PersonDA personDA = new PersonDA()) {
                 RadioButton selectedGenderRadio = (RadioButton) genderToggleGroup.getSelectedToggle();
-                Person person =
-                        Person
-                                .builder()
-                                .id(Integer.parseInt(idTxt.getText()))
-                                .name(nameTxt.getText())
-                                .family(familyTxt.getText())
-                                .username(usernameTxt.getText())
-                                .password(passwordTxt.getText())
-                                .birthDate(birthDate.getValue())
-                                .role(roleCmb.getSelectionModel().getSelectedItem())
-                                .algorithmSkill(algoChk.isSelected())
-                                .javaSkill(javaChk.isSelected())
-                                .gender(Gender.valueOf(selectedGenderRadio.getText()))
-                                .build();
+                Person person = new Person(
+                                nameTxt.getText(),
+                                familyTxt.getText(),
+                                usernameTxt.getText(),
+                                passwordTxt.getText(),
+                                birthDate.getValue(),
+                                roleCmb.getSelectionModel().getSelectedItem(),
+                                algoChk.isSelected(),
+                                javaChk.isSelected(),
+                                Gender.valueOf(selectedGenderRadio.getText()));
                 personDA.save(person);
                 Alert alert = new Alert(
                         Alert.AlertType.INFORMATION,
@@ -103,20 +99,17 @@ public class PersonController implements Initializable {
         editBtn.setOnAction((event) -> {
             try (PersonDA personDA = new PersonDA()) {
                 RadioButton selectedGenderRadio = (RadioButton) genderToggleGroup.getSelectedToggle();
-                Person person =
-                        Person
-                                .builder()
-                                .id(Integer.parseInt(idTxt.getText()))
-                                .name(nameTxt.getText())
-                                .family(familyTxt.getText())
-                                .username(usernameTxt.getText())
-                                .password(passwordTxt.getText())
-                                .birthDate(birthDate.getValue())
-                                .role(roleCmb.getSelectionModel().getSelectedItem())
-                                .algorithmSkill(algoChk.isSelected())
-                                .javaSkill(javaChk.isSelected())
-                                .gender(Gender.valueOf(selectedGenderRadio.getText()))
-                                .build();
+                Person person = new Person(
+                        Integer.parseInt(idTxt.getText()),
+                        nameTxt.getText(),
+                        familyTxt.getText(),
+                        usernameTxt.getText(),
+                        passwordTxt.getText(),
+                        birthDate.getValue(),
+                        roleCmb.getSelectionModel().getSelectedItem(),
+                        algoChk.isSelected(),
+                        javaChk.isSelected(),
+                        Gender.valueOf(selectedGenderRadio.getText()));
                 personDA.edit(person);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Person Edited Successfully", ButtonType.OK);
                 alert.show();
