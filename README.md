@@ -9,8 +9,6 @@
 
 
 [//]: # (todo : ) 
-    - connection pool (dbcp2)
-    - validation
     - relation 
     - mvc
     
