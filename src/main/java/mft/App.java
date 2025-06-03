@@ -15,16 +15,14 @@ import java.sql.SQLException;
 @Log4j2
 public class App extends Application {
     public void saveAdmin() throws SQLException {
-        Person person =
-                Person
-                        .builder()
-                        .name("Admin")
-                        .family("Admin")
-                        .username("Admin")
-                        .password("Admin")
-                        .role(Role.Admin)
-                        .gender(Gender.Male)
-                        .build();
+        Person person = new Person();
+//                        .name("Admin")
+//                        .family("Admin")
+//                        .username("Admin")
+//                        .password("Admin")
+//                        .role(Role.Admin)
+//                        .gender(Gender.Male)
+//                        );
          PersonDA personDA = new PersonDA();
          personDA.save(person);
     }

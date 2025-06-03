@@ -11,8 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
-<Pane fx:controller="mft.controller.LoginController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="352.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="352.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mft.controller.LoginController">
    <children>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="93.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -35,6 +34,6 @@
             <PasswordField fx:id="passwordTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <Button fx:id="loginBtn" layoutX="116.0" layoutY="335.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="103.0" text="Login" />
+      <Button fx:id="loginBtn" defaultButton="true" layoutX="116.0" layoutY="335.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="103.0" text="Login" />
    </children>
 </Pane>

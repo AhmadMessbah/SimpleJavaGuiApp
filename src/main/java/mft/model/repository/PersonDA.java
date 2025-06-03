@@ -1,6 +1,7 @@
 package mft.model.repository;
 
 import lombok.extern.log4j.Log4j2;
+import mft.controller.exception.InvalidPersonDataException;
 import mft.controller.exception.UserNotFoundException;
 import mft.model.entity.Person;
 import mft.model.entity.enums.Gender;
@@ -69,52 +70,47 @@ public class PersonDA implements AutoCloseable {
         log.info("Person Removed " + id);
     }
 
-    public List<Person> findAll() throws SQLException {
+    public List<Person> findAll() throws SQLException, InvalidPersonDataException {
         List<Person> personList = new ArrayList<>();
         connection = ConnectionProvider.getConnectionProvider().getConnection();
         preparedStatement = connection.prepareStatement("select * from persons");
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-            Person person =
-                    Person
-                            .builder()
-                            .id(resultSet.getInt("ID"))
-                            .name(resultSet.getString("NAME"))
-                            .family(resultSet.getString("FAMILY"))
-                            .username(resultSet.getString("USERNAME"))
-                            .password(resultSet.getString("PASSWORD"))
-                            .birthDate(resultSet.getDate("BIRTH_DATE").toLocalDate())
-                            .role(Role.valueOf(resultSet.getString("ROLE")))
-                            .algorithmSkill(resultSet.getBoolean("ALGORITHM_SKILL"))
-                            .javaSkill(resultSet.getBoolean("JAVA_SKILL"))
-                            .gender(Gender.valueOf(resultSet.getString("GENDER")))
-                            .build();
+            Person person = new Person(
+                            resultSet.getInt("ID"),
+                            resultSet.getString("NAME"),
+                            resultSet.getString("FAMILY"),
+                            resultSet.getString("USERNAME"),
+                            resultSet.getString("PASSWORD"),
+                            resultSet.getDate("BIRTH_DATE").toLocalDate(),
+                            Role.valueOf(resultSet.getString("ROLE")),
+                            resultSet.getBoolean("ALGORITHM_SKILL"),
+                            resultSet.getBoolean("JAVA_SKILL"),
+                            Gender.valueOf(resultSet.getString("GENDER")));
             personList.add(person);
         }
         log.info("Find All Persons");
         return personList;
     }
 
-    public Person findById(int id) throws SQLException, UserNotFoundException {
+    public Person findById(int id) throws SQLException, UserNotFoundException, InvalidPersonDataException {
         Person person = null;
         connection = ConnectionProvider.getConnectionProvider().getConnection();
         preparedStatement = connection.prepareStatement("select * from persons where id=?");
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
-            person = Person
-                    .builder()
-                    .id(resultSet.getInt("ID"))
-                    .name(resultSet.getString("NAME"))
-                    .family(resultSet.getString("FAMILY"))
-                    .username(resultSet.getString("USERNAME"))
-                    .password(resultSet.getString("PASSWORD"))
-                    .birthDate(resultSet.getDate("BIRTH_DATE").toLocalDate())
-                    .role(Role.valueOf(resultSet.getString("ROLE")))
-                    .algorithmSkill(resultSet.getBoolean("ALGORITHM_SKILL"))
-                    .javaSkill(resultSet.getBoolean("JAVA_SKILL"))
-                    .gender(Gender.valueOf(resultSet.getString("GENDER")))
-                    .build();
+            person = new Person(
+                    resultSet.getInt("ID"),
+                    resultSet.getString("NAME"),
+                    resultSet.getString("FAMILY"),
+                    resultSet.getString("USERNAME"),
+                    resultSet.getString("PASSWORD"),
+                    resultSet.getDate("BIRTH_DATE").toLocalDate(),
+                    Role.valueOf(resultSet.getString("ROLE")),
+                    resultSet.getBoolean("ALGORITHM_SKILL"),
+                    resultSet.getBoolean("JAVA_SKILL"),
+                    Gender.valueOf(resultSet.getString("GENDER")));
         }
         if (person == null) {
             log.error("No User With Id " + id);
@@ -124,7 +120,7 @@ public class PersonDA implements AutoCloseable {
         return person;
     }
 
-    public List<Person> findByNameAndFamily(String name, String family) throws SQLException, UserNotFoundException {
+    public List<Person> findByNameAndFamily(String name, String family) throws SQLException, UserNotFoundException, InvalidPersonDataException {
         List<Person> personList = new ArrayList<>();
         connection = ConnectionProvider.getConnectionProvider().getConnection();
         preparedStatement = connection.prepareStatement("select * from persons where name like ? and family like ?");
@@ -132,20 +128,17 @@ public class PersonDA implements AutoCloseable {
         preparedStatement.setString(2, family + "%");
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-            Person person =
-                    Person
-                            .builder()
-                            .id(resultSet.getInt("ID"))
-                            .name(resultSet.getString("NAME"))
-                            .family(resultSet.getString("FAMILY"))
-                            .username(resultSet.getString("USERNAME"))
-                            .password(resultSet.getString("PASSWORD"))
-                            .birthDate(resultSet.getDate("BIRTH_DATE").toLocalDate())
-                            .role(Role.valueOf(resultSet.getString("ROLE")))
-                            .algorithmSkill(resultSet.getBoolean("ALGORITHM_SKILL"))
-                            .javaSkill(resultSet.getBoolean("JAVA_SKILL"))
-                            .gender(Gender.valueOf(resultSet.getString("GENDER")))
-                            .build();
+            Person person = new Person(
+                    resultSet.getInt("ID"),
+                    resultSet.getString("NAME"),
+                    resultSet.getString("FAMILY"),
+                    resultSet.getString("USERNAME"),
+                    resultSet.getString("PASSWORD"),
+                    resultSet.getDate("BIRTH_DATE").toLocalDate(),
+                    Role.valueOf(resultSet.getString("ROLE")),
+                    resultSet.getBoolean("ALGORITHM_SKILL"),
+                    resultSet.getBoolean("JAVA_SKILL"),
+                    Gender.valueOf(resultSet.getString("GENDER")));
             personList.add(person);
         }
         if (personList.isEmpty()) {
@@ -156,7 +149,7 @@ public class PersonDA implements AutoCloseable {
         return personList;
     }
 
-    public Person login(String username, String password) throws UserNotFoundException, SQLException {
+    public Person login(String username, String password) throws UserNotFoundException, SQLException, InvalidPersonDataException {
         Person person = null;
         connection = ConnectionProvider.getConnectionProvider().getConnection();
         preparedStatement = connection.prepareStatement("select * from persons where username=? and password=?");
@@ -164,19 +157,17 @@ public class PersonDA implements AutoCloseable {
         preparedStatement.setString(2, password);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
-            person = Person
-                    .builder()
-                    .id(resultSet.getInt("ID"))
-                    .name(resultSet.getString("NAME"))
-                    .family(resultSet.getString("FAMILY"))
-                    .username(resultSet.getString("USERNAME"))
-                    .password(resultSet.getString("PASSWORD"))
-                    .birthDate(resultSet.getDate("BIRTH_DATE").toLocalDate())
-                    .role(Role.valueOf(resultSet.getString("ROLE")))
-                    .algorithmSkill(resultSet.getBoolean("ALGORITHM_SKILL"))
-                    .javaSkill(resultSet.getBoolean("JAVA_SKILL"))
-                    .gender(Gender.valueOf(resultSet.getString("GENDER")))
-                    .build();
+            person = new Person(
+                    resultSet.getInt("ID"),
+                    resultSet.getString("NAME"),
+                    resultSet.getString("FAMILY"),
+                    resultSet.getString("USERNAME"),
+                    resultSet.getString("PASSWORD"),
+                    resultSet.getDate("BIRTH_DATE").toLocalDate(),
+                    Role.valueOf(resultSet.getString("ROLE")),
+                    resultSet.getBoolean("ALGORITHM_SKILL"),
+                    resultSet.getBoolean("JAVA_SKILL"),
+                    Gender.valueOf(resultSet.getString("GENDER")));
         }
         if (person == null) {
             log.error("Login - No User With username/password " + username + ":" + password);

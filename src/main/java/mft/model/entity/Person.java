@@ -1,5 +1,7 @@
 package mft.model.entity;
 
+import com.google.gson.Gson;
+import lombok.experimental.SuperBuilder;
 import mft.controller.exception.InvalidPersonDataException;
 import mft.model.entity.enums.Gender;
 import mft.model.entity.enums.Role;
@@ -7,6 +9,8 @@ import mft.model.entity.enums.Role;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
+
+@SuperBuilder
 
 public class Person implements Serializable {
     private int id;
@@ -20,10 +24,11 @@ public class Person implements Serializable {
     private boolean javaSkill;
     private Gender gender;
 
-//    public Person() {
-//    }
+    public Person() {
+    }
 
     public Person(int id, String name, String family, String username, String password, LocalDate birthDate, Role role, boolean algorithmSkill, boolean javaSkill, Gender gender) throws InvalidPersonDataException {
+        setId(id);
         setName(name);
         setFamily( family);
         setUsername(username);
@@ -142,5 +147,10 @@ public class Person implements Serializable {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }
